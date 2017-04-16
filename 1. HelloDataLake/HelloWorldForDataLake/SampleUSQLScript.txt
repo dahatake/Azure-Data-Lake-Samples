@@ -1,7 +1,7 @@
 ﻿@searchlog =
     EXTRACT UserId          int,
             Start           DateTime,
-            Region          string,
+            Region			string,
             Query           string,
             Duration        int?,
             Urls            string,
@@ -10,5 +10,5 @@
     USING Extractors.Tsv();
 
 OUTPUT @searchlog   
-    TO "/Output/SearchLog-from-Data-Lake.csv"
+    TO "/Output/SearchLog-output.csv"
 USING Outputters.Csv();

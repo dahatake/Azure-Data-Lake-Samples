@@ -15,7 +15,7 @@ Azure Data Lake のサンプルコードです
 (https://azure.microsoft.com/ja-jp/documentation/articles/resource-group-create-service-principal-portal/)
 ### 2. 先のアプリケーションに、Azure Data Lake へのアクセス権を設定
 - Store: ファイルへのアクセス権
-- nalytics: 実行ジョブへのアクセス権
+- Analytics: 実行ジョブへのアクセス権
 
 ### 3. U-SQL スクリプト
 ファイルもしくは文字列で用意します
