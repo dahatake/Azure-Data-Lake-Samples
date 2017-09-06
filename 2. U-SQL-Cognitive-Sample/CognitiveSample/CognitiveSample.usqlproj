@@ -3,14 +3,13 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>f1eabad3-dd14-4854-bf9c-648cc9497a4e</ProjectGuid>
+    <ProjectGuid>7e8002a8-e3de-45f9-8309-539accc53c43</ProjectGuid>
     <OutputType>File</OutputType>
     <AssemblyName>Algebra.xml</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <Name>U-SQL-Cognitive-Sample</Name>
-    <RootNamespace>U-SQL-Cognitive-Sample</RootNamespace>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <Name>CognitiveSample</Name>
+    <RootNamespace>CognitiveSample</RootNamespace>
     <RuntimeVersion>default</RuntimeVersion>
-    <OutputStreamPath>C:\Azure Data Lake</OutputStreamPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,15 +20,9 @@
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Script Include="Cognition-Image.usql" />
-    <Script Include="Cognition-TextAnalytics.usql" />
-  </ItemGroup>
-  <ItemGroup>
-    <ScriptCode Include="Cognition-Image.usql.cs">
-      <DependentUpon>Cognition-Image.usql</DependentUpon>
-    </ScriptCode>
-    <ScriptCode Include="Cognition-TextAnalytics.usql.cs">
-      <DependentUpon>Cognition-TextAnalytics.usql</DependentUpon>
+    <Script Include="Script.usql" />
+    <ScriptCode Include="Script.usql.cs">
+      <DependentUpon>Script.usql</DependentUpon>
     </ScriptCode>
   </ItemGroup>
   <Import Project="$(AppData)\Microsoft\DataLake\MsBuild\1.0\Usql.targets" />

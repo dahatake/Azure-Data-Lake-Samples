@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace U_SQL_Cognitive_Sample
+namespace CognitiveSample
 {
     
 }

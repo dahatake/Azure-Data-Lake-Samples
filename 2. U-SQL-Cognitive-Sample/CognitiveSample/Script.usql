@@ -1,0 +1,75 @@
+﻿// User script
+REFERENCE ASSEMBLY ImageCommon;
+REFERENCE ASSEMBLY FaceSdk;
+REFERENCE ASSEMBLY ImageEmotion;
+REFERENCE ASSEMBLY ImageTagging;
+REFERENCE ASSEMBLY ImageOcr;
+
+@imgs =
+    EXTRACT FileName string, 
+			ImgData byte[]
+    FROM @"/images/{FileName}.jpg"
+    USING new Cognition.Vision.ImageExtractor();
+
+// 1) Tag 
+@objects =
+    PROCESS @imgs //from above
+    PRODUCE FileName, //The schema of the output
+            NumObjects int,
+            Adult bool,
+            Tags SQL.MAP<string,float?> //This is a complext map type
+    READONLY FileName
+    USING new Cognition.Vision.ImageTagger();
+
+//Convert the data from 'complex types' into something serializable.
+//We are 'Select' in this case is converting a KEYVALUE object p into a String.
+@tags = 
+    SELECT FileName,NumObjects,Adult,
+    String.Join(",", 
+				   Tags.Select(p => String.Format("{0}:{1}", p.Key, p.Value))) AS Tags
+    FROM @objects;
+
+OUTPUT @tags
+    TO "/cognitive/outoput/tags.csv"
+    USING Outputters.Csv();
+
+// 2) Emotion
+@emotion_raw =
+	PROCESS @imgs
+    PRODUCE FileName string, 
+			NumFaces int, 
+			Emotion string 
+    READONLY FileName
+    USING new Cognition.Vision.EmotionAnalyzer();
+
+OUTPUT @emotion_raw
+    TO "/cognitive/outoput/emotion.csv"
+    USING Outputters.Csv();
+
+@emotion_table =  
+    SELECT 
+        FileName,
+        SqlArray.Create(Emotion.Split(';')) AS Emotions
+    FROM @emotion_raw;
+
+@emotion =
+    SELECT FileName, 
+		   T.Emotion
+    FROM @emotion_table
+         CROSS APPLY
+             EXPLODE(Emotions) 
+                AS T(Emotion);
+
+// 3) Join
+@correlation =
+    SELECT T.FileName, 
+		   Emotion, 
+		   Tags
+    FROM @emotion AS E
+         INNER JOIN
+             @tags AS T
+         ON E.FileName == T.FileName;
+
+OUTPUT @correlation
+    TO "/cognitive/outoput/correlation.csv"
+    USING Outputters.Csv();
