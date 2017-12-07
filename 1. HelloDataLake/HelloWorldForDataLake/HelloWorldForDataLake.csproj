@@ -97,12 +97,31 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="data\DriverShiftTrips.csv" />
+    <None Include="data\vehicle1_09142014.csv" />
+    <None Include="data\vehicle1_09152014.csv" />
+    <None Include="data\vehicle1_09162014.csv" />
+    <None Include="data\vehicle1_09172014.csv" />
+    <None Include="data\vehicle2_09142014.csv" />
+    <None Include="data\vehicle2_09152014.csv" />
+    <None Include="data\vehicle2_09162014.csv" />
+    <None Include="data\vehicle2_09172014.csv" />
+    <None Include="data\vehicle3_09142014.csv" />
+    <None Include="data\vehicle3_09152014.csv" />
+    <None Include="data\vehicle3_09162014.csv" />
+    <None Include="data\vehicle3_09172014.csv" />
+    <None Include="data\vehicle4_09142014.csv" />
+    <None Include="data\vehicle4_09152014.csv" />
+    <None Include="data\vehicle4_09162014.csv" />
+    <None Include="data\vehicle4_09172014.csv" />
     <None Include="packages.config" />
+    <None Include="USQL_BlobFileSet.usql" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SampleUSQLScript.txt">
+    <Content Include="data\Drivers.txt" />
+    <None Include="SampleUSQLScript.usql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

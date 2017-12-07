@@ -1,0 +1,101 @@
+/*
+	FIle set using Blob
+	1. Blob Storage を Azure Datalake Analyticsにマウント
+  2. 入出力ファイルのパスを、WASB形式に
+		wasbのフォーマット:
+		wasb://<ルートのコンテナ名@Blob Storage Account 名/
+*/
+
+// Define paths
+DECLARE @BLOB_DIR string = "wasb://data@dahatakestorage/";
+DECLARE @BLOB_OUT string = "wasb://data@dahatakestorage/output/";
+
+
+DECLARE @ADL_STREAMSET_REQVID string = @BLOB_DIR + "vehicle{vid}_{date:MM}{date:dd}{date:yyyy}.{*}";
+
+@data_req =
+    EXTRACT vehicle_id int,
+            entry_id long,
+            event_date DateTime,
+            latitude float,
+            longitude float,
+            speed int,
+            direction string,
+            trip_id int?,
+            vid int, // virtual streamset column
+            date DateTime // virtual streamset column
+    FROM @ADL_STREAMSET_REQVID
+    USING Extractors.Csv();
+
+@alldata_req =
+    SELECT *
+    FROM @data_req
+    WHERE date >= DateTime.Parse("2014-08-31") AND date < DateTime.Parse("2014-10-31")
+          AND vid == 1;
+
+DECLARE @alldata_req_out = @BLOB_OUT + "vehicles_req.txt";
+
+OUTPUT @alldata_req
+TO @alldata_req_out
+USING Outputters.Csv();
+
+////////////////////
+
+DECLARE @ADL_STREAMSET_OPTVID string = @BLOB_DIR + "vehicle{vid}_{date:MM}{date:dd}{date:yyyy}.{*}";
+
+@data_opt =
+    EXTRACT vehicle_id int,
+            entry_id long,
+            event_date DateTime,
+            latitude float,
+            longitude float,
+            speed int,
+            direction string,
+            trip_id int?,
+            vid int, // virtual streamset column
+            date DateTime // virtual streamset column
+    FROM @ADL_STREAMSET_OPTVID
+    USING Extractors.Csv();
+
+@alldata_opt =
+    SELECT *
+    FROM @data_opt
+    WHERE date >= DateTime.Parse("2014-08-31") AND date < DateTime.Parse("2014-10-31");
+
+DECLARE @alldata_opt_out = @BLOB_OUT + "vehicles_opt.txt";
+
+OUTPUT @alldata_opt
+TO @alldata_opt_out
+USING Outputters.Csv();
+
+//////////////////////////////
+
+DECLARE @ADL_STREAMSET_PATH string = @BLOB_DIR + "{date:yyyy}/{date:MM}/{date:dd}/vehicle{vid}_{date:MM}{date:dd}{date:yyyy}.csv";
+
+@data_opt =
+    EXTRACT vehicle_id int,
+            entry_id long,
+            event_date DateTime,
+            latitude float,
+            longitude float,
+            speed int,
+            direction string,
+            trip_id int?,
+            vid int, // virtual streamset column
+            date DateTime // virtual streamset column
+    FROM @ADL_STREAMSET_PATH
+    USING Extractors.Csv();
+
+@alldata_path =
+    SELECT *
+    FROM @data_opt
+    WHERE date >= DateTime.Parse("2014-09-16");
+
+
+DECLARE @alldata_path_out = @BLOB_OUT + "vehicles_path.txt";
+
+OUTPUT @alldata_path
+TO @alldata_path_out
+USING Outputters.Csv();
+
+
