@@ -17,6 +17,7 @@
 ### 3. U-SQL スクリプト
 ファイルもしくは文字列で用意します
 
+Please click [here](README.en-us.md) for English version
 
 
 
