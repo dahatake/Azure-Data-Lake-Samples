@@ -10,4 +10,4 @@ Azure Data Lake のサンプルコードです
 U-SQLの拡張機能として取り込まれた、Cognition 機能のサンプルです。
 - U-SQL
 
-Please [click](README.en.md) here for English version
+Please [click](README.en-us.md) here for English version
