@@ -5,10 +5,14 @@ REFERENCE ASSEMBLY ImageEmotion;
 REFERENCE ASSEMBLY ImageTagging;
 REFERENCE ASSEMBLY ImageOcr;
 
+// Define paths
+DECLARE @IMAGESTORE string = "wasb://img@dahatakestorage/{FileName}.jpg";
+DECLARE @DATA_OUT string = "wasb://datalake-output@dahatakestorage/output/";
+
 @imgs =
     EXTRACT FileName string, 
 			ImgData byte[]
-    FROM @"/images/{FileName}.jpg"
+    FROM @IMAGESTORE
     USING new Cognition.Vision.ImageExtractor();
 
 // 1) Tag 
@@ -29,8 +33,10 @@ REFERENCE ASSEMBLY ImageOcr;
 				   Tags.Select(p => String.Format("{0}:{1}", p.Key, p.Value))) AS Tags
     FROM @objects;
 
+DECLARE @TAG_FILE string = @DATA_OUT + "tags.csv";
+
 OUTPUT @tags
-    TO "/cognitive/outoput/tags.csv"
+    TO @TAG_FILE
     USING Outputters.Csv();
 
 // 2) Emotion
@@ -42,8 +48,10 @@ OUTPUT @tags
     READONLY FileName
     USING new Cognition.Vision.EmotionAnalyzer();
 
+DECLARE @EMOTION_FILE string = @DATA_OUT + "emotion.csv";
+
 OUTPUT @emotion_raw
-    TO "/cognitive/outoput/emotion.csv"
+    TO @EMOTION_FILE
     USING Outputters.Csv();
 
 @emotion_table =  
@@ -70,6 +78,8 @@ OUTPUT @emotion_raw
              @tags AS T
          ON E.FileName == T.FileName;
 
+DECLARE @CORRELATION_FILE string = @DATA_OUT + "correlation.csv";
+
 OUTPUT @correlation
-    TO "/cognitive/outoput/correlation.csv"
+    TO @CORRELATION_FILE
     USING Outputters.Csv();

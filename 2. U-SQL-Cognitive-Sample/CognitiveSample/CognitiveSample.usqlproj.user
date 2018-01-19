@@ -2,7 +2,7 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <StartFile>Script.usql</StartFile>
-    <OutputStreamPath>C:\ADLStore</OutputStreamPath>
+    <OutputStreamPath>C:\AzureDataLakeAnalytics</OutputStreamPath>
   </PropertyGroup>
   <ItemGroup>
     <ScriptUserData Include="Script.usql">
@@ -13,7 +13,9 @@
       <ClusterComputeAccount>DataLakeCA:dahatake (dahatake@microsoft.com)</ClusterComputeAccount>
       <ClusterDatabase>master</ClusterDatabase>
       <ClusterSchema>dbo</ClusterSchema>
-      <Parallelism>10</Parallelism>
+      <Parallelism>100</Parallelism>
+      <RecurrenceName>Script_ADLVSTool</RecurrenceName>
+      <RecurrenceId>607152d3-95c3-4bc3-85d5-4bf0d1110572</RecurrenceId>
     </ScriptUserData>
   </ItemGroup>
 </Project>
